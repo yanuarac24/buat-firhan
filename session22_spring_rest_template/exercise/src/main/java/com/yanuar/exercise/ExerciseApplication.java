@@ -1,8 +1,12 @@
 package com.yanuar.exercise;
 
+import com.yanuar.exercise.model.ArticleDao;
+import com.yanuar.exercise.model.PostDao;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,6 +24,8 @@ public class ExerciseApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
+		ArticleDao articleDao = new ArticleDao();
+		PostDao postDao = new PostDao();
 
 		// GET Request
 		ResponseEntity<String> response = restTemplate.getForEntity(urlGet, String.class);
@@ -27,22 +33,21 @@ public class ExerciseApplication implements CommandLineRunner {
 		System.out.println("Response Body : " + response.getBody());
 
 		// POST Request
-//		PostDao postDao = new PostDao();
-//		postDao.setTitle("Testing");
-//		postDao.setBody("Testing REST Template");
-//
-//		HttpEntity<PostDao> request = new HttpEntity<>(postDao);
-//		ResponseEntity<String> postResponse = restTemplate.postForEntity(urlPost, request, String.class);
-//		System.out.println("Status Response : " + postResponse.getStatusCode());
-//		System.out.println("Response Body : " + postResponse.getBody());
+		articleDao.setName("Testing");
+		articleDao.setAvatar("https://s3.amazonaws.com/uifaces/faces/twitter/iduuck/128.jpg");
+
+		HttpEntity<ArticleDao> request = new HttpEntity<>(articleDao);
+		ResponseEntity<String> postResponse = restTemplate.postForEntity(urlPost, request, String.class);
+		System.out.println("Status Response : " + postResponse.getStatusCode());
+		System.out.println("Response Body : " + postResponse.getBody());
 
 		// PUT Request
-//		HttpEntity<PostDao> putRequest = new HttpEntity<>(postDao);
-//		ResponseEntity<String> putResponse = restTemplate.exchange(urlPut, HttpMethod.PUT, putRequest, String.class);
-//		System.out.println("Status Response : " + putResponse.getStatusCode());
-//		System.out.println("Response Body : " + putResponse.getBody());
+		HttpEntity<ArticleDao> putRequest = new HttpEntity<>(articleDao);
+		ResponseEntity<String> putResponse = restTemplate.exchange(urlPut, HttpMethod.PUT, putRequest, String.class);
+		System.out.println("Status Response : " + putResponse.getStatusCode());
+		System.out.println("Response Body : " + putResponse.getBody());
 
 		// DELETE Request
-//		restTemplate.delete(urlDelete);
+		restTemplate.delete(urlDelete);
 	}
 }
